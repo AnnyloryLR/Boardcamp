@@ -10,6 +10,8 @@ async function getRentals(){
 async function getRentalById(id){
     const answer = await db.query(`
         SELECT * FROM rental WHERE id=$1`, [id])
+    
+    return answer;
 }
 
 
