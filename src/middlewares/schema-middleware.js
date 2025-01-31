@@ -4,7 +4,7 @@ export function schemaValidate(schema){
         const validation = schema.validate(req.body, {abortEarly: false});
         if(validation.error){
             const messages = validation.error.details.map(detail => detail.message);
-            return res.status(422).send(messages)
+            return res.status(400).send(messages)
         }
 
         next();
