@@ -1,4 +1,4 @@
-export function conflict(entity){
+export function conflictError(entity){
     return{
         type:"conflict",
         message:`Um(a) ${entity} com esse valor já existe!`

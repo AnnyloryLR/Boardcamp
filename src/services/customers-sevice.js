@@ -1,3 +1,4 @@
+import { conflictError } from "../errors/errors.js";
 import customersRepository from "../repositories/customers-repository.js";
 
 async function getCustomers(){
@@ -13,6 +14,10 @@ async function getCustomerById(id){
 }
 
 async function insertCustomer({name, phone, cpf}){
+    const conflict = customersRepository.getCustomerByCpf(cpf);
+
+    if(conflict) throw conflictError(cpf);
+    
     await customersRepository.insertCustomer(name, phone, cpf);
 
 }
