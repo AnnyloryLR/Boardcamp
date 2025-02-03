@@ -1,19 +1,3 @@
-// conflict error --> 409 use param === "entity";
-//Games "name"
-//customer "cpf"
-//
-//not found error --> 404;
-//DELETE rental, rental RETURN ---> id non existent
-//customer "id"
-//gameId
-//customerId
-
-//unprocessable entity error ---> 422;
-//rental RETURN already finished => 422
-
-//*** schema validation: bad request error --->400:
-//DELETE rental: if renturnDate is empty or null
-
 export function conflict(entity){
     return{
         type:"conflict",

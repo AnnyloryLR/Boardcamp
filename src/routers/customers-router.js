@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { schemaValidate } from "../middlewares/schema-middleware.js";
-import 
-    import { customersSchema } from "../schemas/customers-schema.js";
+import { customersSchema } from "../schemas/customers-schema.js";
 
 
 const customersRouter = Router();
