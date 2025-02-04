@@ -3,7 +3,7 @@ import { db } from "../database/db-connection.js"
 async function getRentals(){
     const answer = await db.query(`
         SELECT * FROM rentals;`)
-
+//not finished
     return answer;
 }
 
@@ -21,11 +21,12 @@ async function insertRental(customerId, gameId, daysRented){
 
     const originalPrice = daysRented * pricePerDay;
     
-    await db.query(
+    const answer = await db.query(
         ` INSERT INTO games (customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee)
-            VALUES ($1, $2, current_date, $3, $4, $5, $6);`, [customerId, gameId, daysRented, null, originalPrice, null]
+            VALUES ($1, $2, current_date, $3, $4, $5, $6) RETURNING games.stockTotal WHERE games.id=gameId;`, [customerId, gameId, daysRented, null, originalPrice, null]
     )
 
+    const stockTotal = answer.rows[0].stockTotal;
 
     return {
         customerId,
@@ -34,7 +35,8 @@ async function insertRental(customerId, gameId, daysRented){
         daysRented,
         returnDate,
         originalPrice,
-        delayFee
+        delayFee,
+        stockTotal     
     }
 
 }
@@ -54,14 +56,19 @@ async function rentalReturn(id){
 
 
     const answer = await db.query(
-        `INSERT INTO rentals (returnDate, delayFee) VALUES (current_date, $2) WHERE id=$1;`,
+        `INSERT INTO rentals (returnDate, delayFee) VALUES (current_date, $2) WHERE id=$1 RETURNING returnDate;`,
         [id, delayFee]) 
+
+    return answer
 
 }
 
 
 async function deleteRental(id){
-   await db.query(`DELETE * FROM rental WHERE id=$1;`, [id])
+   const finished = await db.query(`SELECT rentals.returnDate FROM rentals WHERE id=$1`, [id])
+   await db.query(`DELETE * FROM rental WHERE id=$1;`, [id]);
+
+   return finished;
 }
 
 const rentalsRepository = {

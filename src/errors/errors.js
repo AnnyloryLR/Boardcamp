@@ -18,3 +18,10 @@ export function UnprocessableEntity(){
         message:"não é possível processar!"
     }
 }
+
+export function badRequest(){
+    return{
+        type: "badRequest",
+        message: "essa operação não pode ser realizada!"
+    }
+}
