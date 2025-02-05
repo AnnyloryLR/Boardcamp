@@ -8,7 +8,7 @@ export async function getGames( req, res){
 }
 
 export async function insertGame( req, res){
-    const answer = await gamesService.insertGame();
+    const answer = await gamesService.insertGame(req.body);
 
     res.status(201).send(answer);
 }

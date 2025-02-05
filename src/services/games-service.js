@@ -7,7 +7,7 @@ async function getGames(){
 }
 
 async function insertGame({name, image, stockTotal, pricePerDay}){
-    const conflict = gamesRepository.getGamesByName();
+   const conflict = gamesRepository.getGamesByName(name);
     
     if(conflict) throw conflictError(name);    
     
