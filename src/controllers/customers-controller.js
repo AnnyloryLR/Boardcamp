@@ -1,4 +1,4 @@
-import customersService from "../services/customers-sevice";
+import customersService from "../services/customers-sevice.js";
 
 
 export async function getCustomers( req, res){
