@@ -3,13 +3,15 @@ import { conflictError } from "../errors/errors.js";
 
 async function getGames(){
     const answer = await gamesRepository.getGames();
+    
     return answer
 }
 
-async function insertGame({name, image, stockTotal, pricePerDay}){
-   const conflict = gamesRepository.getGamesByName(name);
+async function insertGame({name, image, stockTotal, pricePerDay}){ 
     
-    if(conflict) throw conflictError(name);    
+    const conflict = await gamesRepository.getGameByName(name)
+
+    if(conflict.rowCount !== 0) throw conflictError(name);    
     
     await gamesRepository.insertGame(name, image, stockTotal, pricePerDay)
 }
