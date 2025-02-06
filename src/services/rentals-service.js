@@ -2,7 +2,9 @@ import { badRequest, notFound, UnprocessableEntity } from "../errors/errors.js";
 import rentalsRepository from "../repositories/rentals-repository.js";
 
 async function getRentals(){
-    await rentalsRepository.getRentals()
+    const answer =  await rentalsRepository.getRentals();
+
+    return answer
 
 }
 
@@ -14,17 +16,27 @@ async function getRentalById(id){
 async function insertRental({customerId, gameId, rentDate, daysRented, returnDate, originalPrice,
     delayFee}){
     
-    const gameExistent = getRentalById(gameId);
-    const existent = getRentalById(customerId);
+    // const rentalExistent = await getRentalById(gameId);
+    // const existent = await getRentalById(customerId);
    
-    if(gameExistent) throw notFound(gameExistent);
+    // if(rentalExistent) throw notFound(rentalExistent);
     
-    if(existent) throw notFound(existent);
+    // if(existent) throw notFound(existent);
 
-    if(delayFee !== null) throw UnprocessableEntity;
+    // if(delayFee !== null) throw UnprocessableEntity;
     
-    await rentalsRepository.insertRental(customerId, gameId, rentDate, daysRented, returnDate, originalPrice,
-        delayFee)
+    // await rentalsRepository.insertRental(customerId, gameId, rentDate, daysRented, returnDate, originalPrice,
+    //     delayFee)
+
+    console.log
+           ( customerId,
+            gameId,
+            daysRented,
+            rentDate,
+            returnDate,
+            originalPrice,
+            delayFee )
+        
     
 }
 

@@ -4,39 +4,37 @@ async function getRentals(){
     const answer = await db.query(`
         SELECT * FROM rentals;`)
 //not finished
-    return answer;
+    return answer.rows;
 }
 
 async function getRentalById(id){
     const answer = await db.query(`
-        SELECT * FROM rental WHERE id=$1;`, [id])
+        SELECT * FROM rentals WHERE id=$1;`, [id])
     
     return answer;
 }
 
 
 async function insertRental(customerId, gameId, daysRented){
-    const pricePerDay = await db.query(`SELECT games.pricePerDay
+    const pricePerDay = await db.query(`SELECT "pricePerDay"
          FROM games WHERE games.id=$1;`, [gameId]);
 
-    const originalPrice = daysRented * pricePerDay;
-    
-    const answer = await db.query(
-        ` INSERT INTO games (customerId, gameId, rentDate, daysRented, returnDate, originalPrice, delayFee)
-            VALUES ($1, $2, current_date, $3, $4, $5, $6) RETURNING games.stockTotal WHERE games.id=gameId;`, [customerId, gameId, daysRented, null, originalPrice, null]
+    const originalPriceCalculated= "1500"
+        
+    await db.query(
+        `  INSERT INTO rentals ("customerId","gameId", "rentDate","daysRented","returnDate", "originalPrice", "delayFee")
+            VALUES ($1, $2, $3, $4, $5, $6, $7);`,
+             [customerId, gameId, daysRented, originalPriceCalculated]
     )
-
-    const stockTotal = answer.rows[0].stockTotal;
 
     return {
         customerId,
         gameId,
-        rentDate,
         daysRented,
+        rentDate,
         returnDate,
-        originalPrice,
-        delayFee,
-        stockTotal     
+        originalPrice:originalPriceCalculated,
+        delayFee
     }
 
 }
