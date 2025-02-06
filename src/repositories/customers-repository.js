@@ -4,14 +4,14 @@ async function getCustomers(){
     const answer = await db.query(`
         SELECT * FROM customers;`)
 
-    return answer
+    return answer.rows
 }
 
 async function getCustomerById(id){
     const answer = await db.query(`
         SELECT * FROM customers WHERE id=$1;`, [id])
 
-    return answer
+    return answer.rows[0]
 }
 
 async function getCustomerByCpf(cpf){

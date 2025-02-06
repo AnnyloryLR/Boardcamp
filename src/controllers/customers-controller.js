@@ -7,11 +7,11 @@ export async function getCustomers( req, res){
     res.status(200).send(answer);
 }
 
-export async function getCustomersById( req, res){
+export async function getCustomerById( req, res){
     const {id} = req.params;
 
-    const answer = customersService.getCustomerById(id);
-
+    const answer = await customersService.getCustomerById(id);
+    
     res.status(200).send(answer);
 }
 
