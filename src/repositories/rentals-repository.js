@@ -1,4 +1,5 @@
 import { db } from "../database/db-connection.js"
+import dayjs from 'dayjs'
 
 async function getRentals(){
     const answer = await db.query(`
@@ -16,16 +17,21 @@ async function getRentalById(id){
 
 
 async function insertRental(customerId, gameId, daysRented){
-    const pricePerDay = await db.query(`SELECT "pricePerDay"
-         FROM games WHERE games.id=$1;`, [gameId]);
 
-    const originalPriceCalculated= "1500"
+    const answer = await db.query(`SELECT "pricePerDay" FROM games WHERE games.id = $1`, [gameId]);
+
+
+    const returnDate = null
+    const originalPrice = daysRented * (answer.rows[0].pricePerDay)
+    const delayFee = null
+    const rentDate = dayjs().locale('br').format('YYYY/MM/DD')
         
     await db.query(
         `  INSERT INTO rentals ("customerId","gameId", "rentDate","daysRented","returnDate", "originalPrice", "delayFee")
-            VALUES ($1, $2, $3, $4, $5, $6, $7);`,
-             [customerId, gameId, daysRented, originalPriceCalculated]
+            VALUES ($1, $2, $3, $4, $5, $6, $7 );`,[customerId, gameId, rentDate, daysRented, returnDate,
+                originalPrice, delayFee]
     )
+
 
     return {
         customerId,
@@ -33,7 +39,7 @@ async function insertRental(customerId, gameId, daysRented){
         daysRented,
         rentDate,
         returnDate,
-        originalPrice:originalPriceCalculated,
+        originalPrice,
         delayFee
     }
 
@@ -41,21 +47,22 @@ async function insertRental(customerId, gameId, daysRented){
 
 async function rentalReturn(id){
     
-    const pricePerDay = await db.query(`SELECT games.pricePerDay
-        FROM games WHERE games.id=$1;`, [gameId]);
+    // const pricePerDay = await db.query(`SELECT "pricePerDay"
+    //     FROM games WHERE games.id=$1;`, [id]);
 
-    const today = await db.query(`SELECT CURRENT_DATE;`)
-    const rentDate = await deb.query(`SELECT rentals.rentDate FROM rentals WHERE rentals.id=${id};`)
-    
+    // const returnDate = dayjs().locale('br').format('YYYY/MM/DD');
 
-    const difference = today - rentDate;
+    // const rentDateSearch = await deb.query(`SELECT "rentDate" FROM rentals WHERE rentals.id=$1;`, [id])
 
-    const delayFee = difference * pricePerDay;
+    // const rentDate = rentDateSearch.rows[0].rentDate
+
+    // const difference = returnDate - rentDate;
+
+    // const delayFee = difference * pricePerDay;
 
 
     const answer = await db.query(
-        `INSERT INTO rentals (returnDate, delayFee) VALUES (current_date, $2) WHERE id=$1 RETURNING returnDate;`,
-        [id, delayFee]) 
+       `UPDATE rentals SET "returnDate"= current_date, "delayFee"=1500 WHERE id=$1;`, [id]);
 
     return answer
 
@@ -63,10 +70,10 @@ async function rentalReturn(id){
 
 
 async function deleteRental(id){
-   const finished = await db.query(`SELECT rentals.returnDate FROM rentals WHERE id=$1`, [id])
-   await db.query(`DELETE * FROM rental WHERE id=$1;`, [id]);
+  
+   const answer = await db.query(`DELETE FROM rentals WHERE id=$1;`, [id]);
 
-   return finished;
+   return answer;
 }
 
 const rentalsRepository = {

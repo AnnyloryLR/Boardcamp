@@ -13,51 +13,41 @@ async function getRentalById(id){
 
 }
 
-async function insertRental({customerId, gameId, rentDate, daysRented, returnDate, originalPrice,
-    delayFee}){
+async function insertRental({customerId, gameId, daysRented}){
     
-    // const rentalExistent = await getRentalById(gameId);
-    // const existent = await getRentalById(customerId);
+    const rentalExistent = await getRentalById(gameId);
+
+    const existent = await getRentalById(customerId);
    
-    // if(rentalExistent) throw notFound(rentalExistent);
+    if(rentalExistent) throw notFound(rentalExistent);
     
-    // if(existent) throw notFound(existent);
+    if(existent) throw notFound(existent);
 
-    // if(delayFee !== null) throw UnprocessableEntity;
+    //if(delayFee !== null) throw UnprocessableEntity;
     
-    // await rentalsRepository.insertRental(customerId, gameId, rentDate, daysRented, returnDate, originalPrice,
-    //     delayFee)
-
-    console.log
-           ( customerId,
-            gameId,
-            daysRented,
-            rentDate,
-            returnDate,
-            originalPrice,
-            delayFee )
-        
+    const answer = await rentalsRepository.insertRental(customerId, gameId, daysRented);      
     
 }
 
-async function rentalReturn(id, {returnDate}) {
+async function rentalReturn(id) {
 
-    if(!id) throw notFound(id);
+    // if(!id) throw notFound(id);
 
-    if(returnDate) throw UnprocessableEntity;
+    // if(returnDate) throw UnprocessableEntity;
 
-    await rentalsRepository.rentalReturn(id)
+    answer = await rentalsRepository.rentalReturn(id)
+    console.log(id)
     
 }
 
-async function deleteRental(id, {finished}) {
+async function deleteRental(id) {
 
     if(!id) throw notFound(id);
 
-    if(finished === null) throw badRequest;
+    //if(finished === null) throw badRequest;
 
 
-    await rentalsRepository.deleteRental(id)
+    await rentalsRepository.deleteRental(id);
     
 }
 
