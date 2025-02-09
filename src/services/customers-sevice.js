@@ -9,7 +9,7 @@ async function getCustomers(){
 
 async function getCustomerById(id){
     const answer = await customersRepository.getCustomerById(id);
-    //console.log(answer)
+
     return answer
 }
 

@@ -4,8 +4,7 @@ import rentalsRepository from "../repositories/rentals-repository.js";
 async function getRentals(){
     const answer =  await rentalsRepository.getRentals();
 
-    return answer
-
+    return answer 
 }
 
 async function getRentalById(id){
@@ -14,37 +13,48 @@ async function getRentalById(id){
 }
 
 async function insertRental({customerId, gameId, daysRented}){
-    
-    const rentalExistent = await getRentalById(gameId);
-
-    const existent = await getRentalById(customerId);
    
-    if(rentalExistent) throw notFound(rentalExistent);
-    
-    if(existent) throw notFound(existent);
+    const {existentGame} = await rentalsRepository.insertRental(customerId, gameId, daysRented);
 
-    //if(delayFee !== null) throw UnprocessableEntity;
+    const {existentCustomer} = await rentalsRepository.insertRental(customerId, gameId, daysRented);
     
-    const answer = await rentalsRepository.insertRental(customerId, gameId, daysRented);      
+    const {delayFee} = await rentalsRepository.insertRental(customerId, gameId, daysRented); 
+
+   
+    if(existentGame.rowCount === 0 ) throw notFound(gameId);
     
+    if(existentCustomer.rowCount === 0 ) throw notFound(customerId);
+
+    if(delayFee !== null) throw UnprocessableEntity();
+    
+    await rentalsRepository.insertRental(customerId, gameId, daysRented); 
+
 }
 
 async function rentalReturn(id) {
-
-    // if(!id) throw notFound(id);
-
-    // if(returnDate) throw UnprocessableEntity;
-
-    answer = await rentalsRepository.rentalReturn(id)
-    console.log(id)
     
+    const existentId = await rentalsRepository.getRentalById(id);
+   
+    let returnDate = await rentalsRepository.getRentalById(id);
+    returnDate = returnDate.rows[0].returnDate;
+  
+    if(existentId.rowCount === 0) throw notFound(id);
+
+    if(returnDate) throw UnprocessableEntity();
+
+    await rentalsRepository.rentalReturn(id);
+
 }
 
 async function deleteRental(id) {
 
-    if(!id) throw notFound(id);
+    const existentId  = await rentalsRepository.getRentalById(id);
+    let returnDate = await rentalsRepository.getRentalById(id);
+    returnDate = returnDate.rows[0].returnDate
 
-    //if(finished === null) throw badRequest;
+    if (existentId.rowCount === 0) throw notFound(id);
+
+    if (returnDate === null) throw badRequest();
 
 
     await rentalsRepository.deleteRental(id);

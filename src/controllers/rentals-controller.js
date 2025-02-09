@@ -24,18 +24,16 @@ export async function insertRental( req, res){
 
 export async function rentalReturn( req, res){
     const { id } = req.params;
-    console.log(id)
 
-    // const answer = await rentalsService.rentalReturn(id);
+    const answer = await rentalsService.rentalReturn(id);
 
-    // res.status(200).send(answer);
+    res.status(200).send(answer);
 }
 
 export async function deleteRental( req, res){
     const { id } = req.params;
-    console.log(id)
 
-    // const answer = await rentalsService.deleteRental(id);
+    const answer = await rentalsService.deleteRental(id);
 
-    // res.status(204).send(answer);
+    res.status(204).send(answer);
 }

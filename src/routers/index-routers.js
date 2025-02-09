@@ -3,10 +3,10 @@ import customersRouter from "./customers-router.js";
 import gamesRouter from "./games-router.js";
 import rentalsRouter from "./rentals-router.js";
 
-const router = Router();
+const routerIndex = Router();
 
-router.use(customersRouter);
-router.use(gamesRouter);
-router.use(rentalsRouter);
+routerIndex.use(customersRouter);
+routerIndex.use(gamesRouter);
+routerIndex.use(rentalsRouter);
 
-export default router
+export default routerIndex

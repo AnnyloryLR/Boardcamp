@@ -22,6 +22,6 @@ export function UnprocessableEntity(){
 export function badRequest(){
     return{
         type: "badRequest",
-        message: "essa operação não pode ser realizada!"
+        message: "esta operação não pode ser realizada sem a data de devolução!"
     }
 }
