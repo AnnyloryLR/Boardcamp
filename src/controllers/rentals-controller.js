@@ -8,12 +8,12 @@ export async function getRentals( req, res){
 }
 
 export async function getRentalById( req, res){
-    const id = req.params;
+    const {id} = req.params;
 
     const answer = await rentalsService.getRentalById(id);
     
 
-    res.status(201).send(answer);
+    res.status(200).send(answer);
 }
 
 export async function insertRental( req, res){

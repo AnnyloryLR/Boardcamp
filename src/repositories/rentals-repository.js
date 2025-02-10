@@ -26,14 +26,12 @@ async function getRentalById(id){
     return answer;
 }
 
+async function getRentedGame(gameId){
+    const answer = await db.query(`SELECT "returnDate" FROM rentals WHERE "gameId"=$1 AND "returnDate" IS NULL;`, [gameId]);
 
+    return answer.rowCount
+}
 async function insertRental(customerId, gameId, daysRented){
-
-    let existentCustomer = await db.query(`SELECT customers.id FROM customers WHERE customers.id=$1`, [customerId]);
-    existentCustomer = existentCustomer.rowCount 
-
-    let existentGame = await db.query(`SELECT games.id FROM games WHERE games.id=$1`, [gameId]);
-    existentGame = existentGame.rowCount
     
     const pricePerDay = await db.query(`SELECT "pricePerDay" FROM games WHERE games.id = $1`, [gameId]);
     const returnDate = null
@@ -49,8 +47,6 @@ async function insertRental(customerId, gameId, daysRented){
 
 
     return {
-        existentCustomer,
-        existentGame,
         customerId,
         gameId,
         daysRented,
@@ -101,6 +97,7 @@ async function deleteRental(id){
 const rentalsRepository = {
     getRentals,
     getRentalById,
+    getRentedGame,
     insertRental,
     rentalReturn,
     deleteRental

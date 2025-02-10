@@ -8,9 +8,15 @@ async function getGames(){
 }
 
 async function getGameByName(name){
-     const conflict= await db.query(`SELECT games.name FROM games WHERE games.name = $1;`, [name]);
+     const answer= await db.query(`SELECT games.name FROM games WHERE games.name = $1;`, [name]);
      
-     return conflict
+     return answer
+}
+
+async function getGameById(id){
+    const answer= await db.query(`SELECT * FROM games WHERE games.id = $1;`, [id]);
+    
+    return answer
 }
 
 async function insertGame(name, image, stockTotal, pricePerDay){
@@ -30,6 +36,7 @@ async function insertGame(name, image, stockTotal, pricePerDay){
 const gamesRepository = {
     getGames,
     getGameByName,
+    getGameById,
     insertGame
 }
 
