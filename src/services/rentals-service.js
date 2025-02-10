@@ -19,7 +19,7 @@ async function insertRental({customerId, gameId, daysRented}){
     const {existentCustomer} = await rentalsRepository.insertRental(customerId, gameId, daysRented);
     
     const {delayFee} = await rentalsRepository.insertRental(customerId, gameId, daysRented); 
-
+    console.log(delayFee)
    
     if(existentGame.rowCount === 0 ) throw notFound(gameId);
     
@@ -28,7 +28,6 @@ async function insertRental({customerId, gameId, daysRented}){
     if(delayFee !== null) throw UnprocessableEntity();
     
     await rentalsRepository.insertRental(customerId, gameId, daysRented); 
-
 }
 
 async function rentalReturn(id) {

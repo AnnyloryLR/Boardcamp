@@ -11,7 +11,7 @@ async function getCustomerById(id){
     const answer = await db.query(`
         SELECT * FROM customers WHERE id=$1;`, [id])
 
-    return answer.rows[0]
+    return answer
 }
 
 async function getCustomerByCpf(cpf){

@@ -38,7 +38,7 @@ async function insertRental(customerId, gameId, daysRented){
     const pricePerDay = await db.query(`SELECT "pricePerDay" FROM games WHERE games.id = $1`, [gameId]);
     const returnDate = null
     const originalPrice = daysRented * (pricePerDay.rows[0].pricePerDay)
-    const delayFee =1500
+    const delayFee = null
     const rentDate = dayjs().locale('br').format('YYYY/MM/DD')
         
     await db.query(
